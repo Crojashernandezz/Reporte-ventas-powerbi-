@@ -1,0 +1,121 @@
+table costos
+	lineageTag: 3e9fa209-47c2-42d2-ab4c-87438fca8507
+
+	measure 'Total Ventas' = SUM(ventas[total_venta])
+		lineageTag: c19f706c-58e5-4320-8803-8747597537aa
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Crecimiento Mes Anterior' = ```
+			
+			VAR VentasActual = [Total Ventas]
+			VAR VentasAnterior = 
+			    CALCULATE([Total Ventas], PREVIOUSMONTH(Calendario[Date]))
+			RETURN 
+			    IF(ISBLANK(VentasAnterior), BLANK(), VentasActual - VentasAnterior)
+			```
+		lineageTag: e5f224ec-02fb-45d9-b679-a616b4a818aa
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure Utilidad =
+			
+			VAR Ventas = [Total Ventas]
+			VAR Costos = [Total Costos]
+			
+			RETURN Ventas - Costos
+		lineageTag: 8a650c93-d8cc-4d18-b0c0-1289bd3bec71
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Costos' = sum(costos[total_costo])
+		lineageTag: 66908fda-427b-478b-b602-8a66249b5a25
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Ciudad Mayor Utilidad' = ```
+			
+			VAR CiudadMaxUtilidad = 
+			    TOPN(
+			        1, 
+			        SUMMARIZE(
+			            Sucursales, 
+			            Sucursales[ciudad], 
+			            "Utilidad", [Utilidad]
+			        ), 
+			        [Utilidad], 
+			        DESC
+			    )
+			
+			RETURN SELECTCOLUMNS(CiudadMaxUtilidad, "Ciudad", Sucursales[ciudad])
+			
+			```
+		lineageTag: c7bd1dca-8d42-47da-b140-1881ced42345
+
+	column id_costo
+		dataType: int64
+		formatString: 0
+		lineageTag: 695f88cc-0e79-4393-b374-796a660a460b
+		summarizeBy: sum
+		sourceColumn: id_costo
+
+		annotation SummarizationSetBy = Automatic
+
+	column id_sucursal
+		dataType: int64
+		formatString: 0
+		lineageTag: d9280ce4-1ac5-4813-8b6e-f49eb0648bf1
+		summarizeBy: none
+		sourceColumn: id_sucursal
+
+		annotation SummarizationSetBy = Automatic
+
+	column id_producto
+		dataType: int64
+		formatString: 0
+		lineageTag: 0e6f1444-1af9-41df-bd1e-10befc5803aa
+		summarizeBy: none
+		sourceColumn: id_producto
+
+		annotation SummarizationSetBy = Automatic
+
+	column fecha_costo
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 3888a1e5-0f5e-4b2b-a2d2-cc0024c16480
+		summarizeBy: none
+		sourceColumn: fecha_costo
+
+		annotation SummarizationSetBy = Automatic
+
+	column cantidad_comprada
+		dataType: int64
+		formatString: 0
+		lineageTag: 323af112-d5cb-4822-bdbe-518273644e41
+		summarizeBy: sum
+		sourceColumn: cantidad_comprada
+
+		annotation SummarizationSetBy = Automatic
+
+	column total_costo
+		dataType: double
+		lineageTag: 451de6f1-2a9c-4820-a167-9d84bfef3171
+		summarizeBy: sum
+		sourceColumn: total_costo
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition costos = m
+		mode: import
+		source =
+				let
+				    Origen = MySQL.Database("localhost", "ventas_costos", [ReturnSingleDatabase=true, Query="SELECT * FROM costos WHERE fecha_costo >= DATE_SUB(CURDATE(), INTERVAL 12 MONTH);#(lf)"])
+				in
+				    Origen
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,61 @@
+table productos
+	lineageTag: cee1e330-0819-4e96-87bd-8509af3b05b3
+
+	column id_producto
+		dataType: int64
+		formatString: 0
+		lineageTag: 6563755c-6a62-4106-a4c5-bd95d1781cf8
+		summarizeBy: none
+		sourceColumn: id_producto
+
+		annotation SummarizationSetBy = Automatic
+
+	column nombre_producto
+		dataType: string
+		lineageTag: 10062a8d-0c84-4b65-9c6e-6647d24fe43d
+		summarizeBy: none
+		sourceColumn: nombre_producto
+
+		annotation SummarizationSetBy = Automatic
+
+	column categoria
+		dataType: string
+		lineageTag: 41227879-e7a9-486a-a5b5-90e6a7796e84
+		summarizeBy: none
+		sourceColumn: categoria
+
+		annotation SummarizationSetBy = Automatic
+
+	column precio_venta
+		dataType: double
+		lineageTag: 51d9641c-1e52-43ab-84ed-383bd1a73603
+		summarizeBy: sum
+		sourceColumn: precio_venta
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column costo_unitario
+		dataType: double
+		lineageTag: d278f3aa-0c24-449a-86b2-1c99fb4e9181
+		summarizeBy: sum
+		sourceColumn: costo_unitario
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition productos = m
+		mode: import
+		source =
+				let
+				    Origen = MySQL.Database("localhost", "ventas_costos", [ReturnSingleDatabase=true]),
+				    ventas_costos_productos = Origen{[Schema="ventas_costos",Item="productos"]}[Data]
+				in
+				    ventas_costos_productos
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navegación
+

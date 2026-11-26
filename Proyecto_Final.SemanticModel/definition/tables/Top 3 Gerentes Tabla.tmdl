@@ -1,0 +1,48 @@
+table 'Top 3 Gerentes Tabla'
+	lineageTag: 87521165-3c89-4f9a-9a46-a35c5e68e6b2
+
+	column gerente
+		lineageTag: 24cd87ef-93bc-40af-b428-fbb794c4db82
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: sucursales[gerente]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Utilidad
+		lineageTag: dba92031-6ca9-46e7-bbd9-e0a57f9cd285
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Utilidad]
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition 'Top 3 Gerentes Tabla' = calculated
+		mode: import
+		source = ```
+				
+				VAR FechaMaxima = MAX(Calendario[Date]) -- Encuentra la fecha más reciente
+				VAR AnoActual = YEAR(FechaMaxima)       -- Extrae el año de esa fecha
+				VAR MesActual = MONTH(FechaMaxima)      -- Extrae el mes de esa fecha
+				
+				VAR GerentesTop = 
+				    TOPN(3, 
+				        SUMMARIZE(
+				            ventas,
+				            sucursales[gerente], 
+				            "Utilidad", CALCULATE([Utilidad], 
+				                YEAR(Calendario[Date]) = AnoActual,  
+				                MONTH(Calendario[Date]) = MesActual  
+				            )
+				        ), 
+				        [Utilidad], 
+				        DESC
+				    )
+				
+				RETURN GerentesTop
+				```
+
+	annotation PBI_Id = 6f7b67b11a354298b52e15c84350a77b
+

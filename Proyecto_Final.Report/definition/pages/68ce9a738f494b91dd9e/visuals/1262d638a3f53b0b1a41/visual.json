@@ -1,0 +1,72 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "1262d638a3f53b0b1a41",
+  "position": {
+    "x": 385.62627585996773,
+    "y": 14.975777703299718,
+    "z": 1000,
+    "height": 86.110721793973369,
+    "width": 215.90079522257093,
+    "tabOrder": 1000
+  },
+  "visual": {
+    "visualType": "card",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "costos"
+                    }
+                  },
+                  "Property": "Utilidad"
+                }
+              },
+              "queryRef": "costos.Utilidad",
+              "nativeQueryRef": "Total Utilidades",
+              "displayName": "Total Utilidades"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "costos"
+                  }
+                },
+                "Property": "Utilidad"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "objects": {
+      "labels": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "30D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

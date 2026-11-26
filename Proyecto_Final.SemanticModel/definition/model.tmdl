@@ -1,0 +1,25 @@
+model Model
+	culture: es-CL
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: es-CL
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation PBI_QueryOrder = ["productos","sucursales","ventas","costos"]
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table DateTableTemplate_db19f8fb-999e-4c69-a4c1-d92f415bd105
+ref table productos
+ref table sucursales
+ref table ventas
+ref table costos
+ref table Calendario
+ref table LocalDateTable_80d6eef4-9c63-452e-877d-920e0178f8be
+ref table 'Top 3 Gerentes Tabla'
+
+ref cultureInfo es-CL
+

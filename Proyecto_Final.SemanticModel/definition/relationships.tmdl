@@ -1,0 +1,29 @@
+relationship AutoDetected_7312af28-9cc9-418d-a937-a4f5c1667f71
+	fromColumn: costos.id_producto
+	toColumn: productos.id_producto
+
+relationship AutoDetected_f75e4d20-42bb-46a5-8b29-7ff6ffac6f72
+	fromColumn: costos.id_sucursal
+	toColumn: sucursales.id_sucursal
+
+relationship d0d0e927-10f8-311d-1e02-26adf40dc8c5
+	fromColumn: ventas.id_producto
+	toColumn: productos.id_producto
+
+relationship 043bb193-2011-448d-ce8b-a568d7fad5c5
+	fromColumn: ventas.id_sucursal
+	toColumn: sucursales.id_sucursal
+
+relationship 88dde708-f5aa-46d5-97c2-04f89c2fdb57
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Calendario.Date
+	toColumn: LocalDateTable_80d6eef4-9c63-452e-877d-920e0178f8be.Date
+
+relationship bb54022d-5aa4-0d2f-9026-00de4e519d90
+	fromColumn: costos.fecha_costo
+	toColumn: Calendario.Date
+
+relationship c354f69d-2799-da06-f8f3-2450f5ca6a7a
+	fromColumn: ventas.fecha_venta
+	toColumn: Calendario.Date
+
